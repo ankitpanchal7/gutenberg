@@ -115,10 +115,11 @@ function gutenberg_experimental_global_styles_get_theme_support_settings( $setti
  * the corresponding stylesheet.
  *
  * @param WP_Theme_JSON $tree Input tree.
+ * @param string        $type Type of stylesheet we want accepts 'all', 'block_styles', and 'css_variables'.
  *
  * @return string Stylesheet.
  */
-function gutenberg_experimental_global_styles_get_stylesheet( $tree ) {
+function gutenberg_experimental_global_styles_get_stylesheet( $tree, $type = 'all' ) {
 	// Check if we can use cached.
 	$can_use_cached = (
 		( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) &&
@@ -135,9 +136,9 @@ function gutenberg_experimental_global_styles_get_stylesheet( $tree ) {
 		}
 	}
 
-	$stylesheet = $tree->get_stylesheet();
+	$stylesheet = $tree->get_stylesheet( $type );
 
-	if ( gutenberg_experimental_global_styles_has_theme_json_support() ) {
+	if ( ( 'all' === $type || 'block_styles' === $type ) && gutenberg_experimental_global_styles_has_theme_json_support() ) {
 		// To support all themes, we added in the block-library stylesheet
 		// a style rule such as .has-link-color a { color: var(--wp--style--color--link, #00e); }
 		// so that existing link colors themes used didn't break.
@@ -221,7 +222,13 @@ function gutenberg_experimental_global_styles_settings( $settings ) {
 		// we need to add the styles via the settings. This is because
 		// we want them processed as if they were added via add_editor_styles,
 		// which adds the editor wrapper class.
-		$settings['styles'][] = array( 'css' => gutenberg_experimental_global_styles_get_stylesheet( $all ) );
+		$settings['styles'][] = array(
+			'css'                     => gutenberg_experimental_global_styles_get_stylesheet( $all, 'css_variables' ),
+			'__experimentalNoWrapper' => true,
+		);
+		$settings['styles'][] = array(
+			'css' => gutenberg_experimental_global_styles_get_stylesheet( $all, 'block_styles' ),
+		);
 	}
 
 	return $settings;
