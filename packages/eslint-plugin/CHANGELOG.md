@@ -1,9 +1,10 @@
 <!-- Learn how to maintain this file at https://github.com/WordPress/gutenberg/tree/master/packages#maintaining-changelogs. -->
 
 ## Unreleased
+
 ### Breaking Changes
 
--   Add `no-unsafe-wp-apis` to recommended rules ([#27301](https://github.com/WordPress/gutenberg/pull/27301)).
+-   Add `no-unsafe-wp-apis` to recommended rules ([#27327](https://github.com/WordPress/gutenberg/pull/27327)).
 
 ### Enhancements
 
